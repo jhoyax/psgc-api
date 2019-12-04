@@ -9,22 +9,22 @@ class Province extends Model
     protected $fillable = ['code', 'name', 'income_classification', 'population'];
 
     /**
-     * Get all cities of the region
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all cities of the province
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function cities()
     {
-        return $this->hasMany(City::class)->orderBy('name');
+        return $this->morphMany(City::class, 'city');
     }
 
     /**
-     * Get all municipalities of the region
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all municipalities of the province
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function municipalities()
     {
-        return $this->hasMany(Municipality::class)->orderBy('name');
+        return $this->morphMany(Municipality::class, 'municipality');
     }
 }

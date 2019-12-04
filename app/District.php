@@ -9,12 +9,22 @@ class District extends Model
     protected $fillable = ['code', 'name', 'population'];
 
     /**
-     * Get all cities of the region
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all cities of the district
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function cities()
     {
-        return $this->hasMany(City::class)->orderBy('name');
+        return $this->morphMany(City::class, 'city');
+    }
+
+    /**
+     * Get all municipalities of the district
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function municipalities()
+    {
+        return $this->morphMany(Municipality::class, 'municipality');
     }
 }

@@ -9,8 +9,8 @@ class City extends Model
     protected $fillable = ['code', 'name', 'city_class', 'income_classification', 'population'];
 
     /**
-     * Get all subMunicipalities of the region
-     * 
+     * Get all subMunicipalities of the city
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function subMunicipalities()
@@ -19,12 +19,20 @@ class City extends Model
     }
 
     /**
-     * Get all barangays of the region
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all barangays of the city
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function barangays()
     {
-        return $this->hasMany(Barangay::class)->orderBy('name');
+        return $this->morphMany(Barangay::class, 'barangay');
+    }
+
+    /**
+     * Get the owning city model.
+     */
+    public function city()
+    {
+        return $this->morphTo();
     }
 }

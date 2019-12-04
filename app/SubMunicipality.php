@@ -9,12 +9,12 @@ class SubMunicipality extends Model
     protected $fillable = ['code', 'name', 'population'];
 
     /**
-     * Get all barangays of the region
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all barangays of the subMunicipality
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function barangays()
     {
-        return $this->hasMany(Barangay::class)->orderBy('name');
+        return $this->morphMany(Barangay::class, 'barangay');
     }
 }

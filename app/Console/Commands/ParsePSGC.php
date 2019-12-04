@@ -141,6 +141,10 @@ class ParsePSGC extends Command
     {
         $lastProvince = Province::orderBy('created_at', 'desc')->first();
         $lastDistrict = District::orderBy('created_at', 'desc')->first();
+
+        $latestProvince = optional($lastProvince)->id;
+        $latestDistrict = optional($lastDistrict)->id;
+
         $data = [
             'code' => $row['Code'],
             'name' => $row['Name'],
@@ -149,9 +153,11 @@ class ParsePSGC extends Command
             'population' => stringToInt($row["POPULATION\n(2015 POPCEN)"]),
         ];
 
-        // // Determine which is latest and use it to create data
-        // $lastProvince->cities()->create($data);
-        // $lastDistrict->cities()->create($data);
+        if ($latestProvince > $latestDistrict) {
+            $lastProvince->cities()->create($data);
+        } elseif ($latestDistrict > $latestProvince) {
+            $lastDistrict->cities()->create($data);
+        }
     }
 
     /**
@@ -161,7 +167,7 @@ class ParsePSGC extends Command
      */
     public function createMunicipality($row)
     {
-        $lastProvince = Province::orderBy('created_at', 'desc')->first();
+        $lastProvince = Province::orderBy('id', 'desc')->first();
 
         $lastProvince->municipalities()->create([
             'code' => $row['Code'],
@@ -194,18 +200,35 @@ class ParsePSGC extends Command
      */
     public function createBarangay($row)
     {
-        $lastCity = City::orderBy('created_at', 'desc')->first();
-        $lastMunicipality = Municipality::orderBy('created_at', 'desc')->first();
-        $lastSubMunicipality = SubMunicipality::orderBy('created_at', 'desc')->first();
+        $lastCity = City::orderBy('id', 'desc')->first();
+        $lastMunicipality = Municipality::orderBy('id', 'desc')->first();
+        $lastSubMunicipality = SubMunicipality::orderBy('id', 'desc')->first();
+
+        $latestCity = optional($lastCity)->id;
+        $latestMunicipality = optional($lastMunicipality)->id;
+        $latestSubMunicipality = optional($lastSubMunicipality)->id;
+
         $data = [
             'code' => $row['Code'],
             'name' => $row['Name'],
             'population' => stringToInt($row["POPULATION\n(2015 POPCEN)"]),
         ];
 
-        // // Determine which is latest and use it to create data
-        // $lastCity->barangays()->create($data);
-        // $lastMunicipality->barangays()->create($data);
-        // $lastSubMunicipality->barangays()->create($data);
+        if (
+            $latestCity > $latestMunicipality
+            && $latestCity > $latestSubMunicipality
+        ) {
+            $lastCity->barangays()->create($data);
+        } elseif (
+            $latestMunicipality > $latestCity
+            && $latestMunicipality > $latestSubMunicipality
+        ) {
+            $lastMunicipality->barangays()->create($data);
+        } elseif (
+            $latestSubMunicipality > $latestCity
+            && $latestSubMunicipality > $latestMunicipality
+        ) {
+            $lastSubMunicipality->barangays()->create($data);
+        }
     }
 }
