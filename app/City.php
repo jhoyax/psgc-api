@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
 {
-    protected $fillable = ['code', 'name', 'city_class', 'income_classification', 'population'];
+    protected $fillable = ['code', 'name', 'city_class', 'income_class', 'population'];
 
     /**
      * Get all subMunicipalities of the city
@@ -25,13 +25,13 @@ class City extends Model
      */
     public function barangays()
     {
-        return $this->morphMany(Barangay::class, 'barangay');
+        return $this->morphMany(Barangay::class, 'geographic')->orderBy('name');
     }
 
     /**
-     * Get the owning city model.
+     * Get the owning geographic model.
      */
-    public function city()
+    public function geographic()
     {
         return $this->morphTo();
     }

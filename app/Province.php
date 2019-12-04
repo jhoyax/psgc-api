@@ -15,7 +15,7 @@ class Province extends Model
      */
     public function cities()
     {
-        return $this->morphMany(City::class, 'city');
+        return $this->morphMany(City::class, 'geographic')->orderBy('name');
     }
 
     /**
@@ -25,6 +25,6 @@ class Province extends Model
      */
     public function municipalities()
     {
-        return $this->morphMany(Municipality::class, 'municipality');
+        return $this->morphMany(Municipality::class, 'geographic')->orderBy('name');
     }
 }

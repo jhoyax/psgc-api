@@ -15,7 +15,7 @@ class CreateBarangaysTable extends Migration
     {
         Schema::create('barangays', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->morphs('barangay');
+            $table->morphs('geographic');
             $table->string('code');
             $table->string('name');
             $table->enum('area_type', ['urban', 'rural']);

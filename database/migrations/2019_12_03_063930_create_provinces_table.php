@@ -18,7 +18,7 @@ class CreateProvincesTable extends Migration
             $table->unsignedBigInteger('region_id');
             $table->string('code');
             $table->string('name');
-            $table->string('income_classification')->nullable();
+            $table->string('income_class')->nullable();
             $table->integer('population')->default(0);
             $table->timestamps();
 

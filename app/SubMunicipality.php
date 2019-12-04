@@ -15,6 +15,6 @@ class SubMunicipality extends Model
      */
     public function barangays()
     {
-        return $this->morphMany(Barangay::class, 'barangay');
+        return $this->morphMany(Barangay::class, 'geographic')->orderBy('name');
     }
 }

@@ -2,12 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\City;
-use App\District;
-use App\Municipality;
-use App\Province;
 use App\Region;
-use App\SubMunicipality;
 use Illuminate\Console\Command;
 use Spatie\SimpleExcel\SimpleExcelReader;
 
@@ -26,6 +21,14 @@ class ParsePSGC extends Command
      * @var string
      */
     protected $description = 'Parse PSGC and load data to database';
+
+    protected $latestRegion;
+
+    protected $latestProvinceDistrict;
+
+    protected $latestCity;
+
+    protected $latestCityMunSubMun;
 
     /**
      * Create a new command instance.
@@ -49,40 +52,21 @@ class ParsePSGC extends Command
         SimpleExcelReader::create($filePath)
             ->getRows()
             ->each(function (array $rowProperties) {
-                $this->save($rowProperties);
+                $row = [
+                    'code' => $rowProperties['Code'],
+                    'name' => $rowProperties['Name'],
+                    'level' => $rowProperties['Geographic Level'],
+                    'city_class' => $rowProperties['City Class'],
+                    'income_class' => $rowProperties["Income\nClassification"],
+                    'area_type' => $rowProperties["Urban / Rural\n(based on 2015 POPCEN)"] == 'R' ? 'rural' : 'urban',
+                    'population' => stringToInt($rowProperties["POPULATION\n(2015 POPCEN)"]),
+                ];
+                $methodName = 'create' . $row['level'];
+                
+                if (method_exists($this, $methodName)) {
+                    $this->$methodName($row);
+                }
             });
-    }
-
-    /**
-     * Save data to database
-     *
-     * @param  array  $row
-     */
-    public function save($row)
-    {
-        switch ($row['Geographic Level']) {
-            case 'Reg':
-                $this->createRegion($row);
-                break;
-            case 'Prov':
-                $this->createProvince($row);
-                break;
-            case 'Dist':
-                $this->createDistrict($row);
-                break;
-            case 'City':
-                $this->createCity($row);
-                break;
-            case 'Mun':
-                $this->createMunicipality($row);
-                break;
-            case 'SubMun':
-                $this->createSubMunicipality($row);
-                break;
-            case 'Bgy':
-                $this->createBarangay($row);
-                break;
-        }
     }
 
     /**
@@ -90,13 +74,9 @@ class ParsePSGC extends Command
      *
      * @param  array  $row
      */
-    public function createRegion($row)
+    public function createReg($row)
     {
-        Region::create([
-            'code' => $row['Code'],
-            'name' => $row['Name'],
-            'population' => stringToInt($row["POPULATION\n(2015 POPCEN)"]),
-        ]);
+        $this->latestRegion = Region::create($row);
     }
 
     /**
@@ -104,16 +84,9 @@ class ParsePSGC extends Command
      *
      * @param  array  $row
      */
-    public function createProvince($row)
+    public function createProv($row)
     {
-        $lastRegion = Region::orderBy('created_at', 'desc')->first();
-
-        $lastRegion->provinces()->create([
-            'code' => $row['Code'],
-            'name' => $row['Name'],
-            'income_classification' => $row["Income\nClassification"],
-            'population' => stringToInt($row["POPULATION\n(2015 POPCEN)"]),
-        ]);
+        $this->latestProvinceDistrict = $this->latestRegion->provinces()->create($row);
     }
 
     /**
@@ -121,15 +94,9 @@ class ParsePSGC extends Command
      *
      * @param  array  $row
      */
-    public function createDistrict($row)
+    public function createDist($row)
     {
-        $lastRegion = Region::orderBy('created_at', 'desc')->first();
-
-        $lastRegion->districts()->create([
-            'code' => $row['Code'],
-            'name' => $row['Name'],
-            'population' => stringToInt($row["POPULATION\n(2015 POPCEN)"]),
-        ]);
+        $this->latestProvinceDistrict = $this->latestRegion->districts()->create($row);
     }
 
     /**
@@ -139,25 +106,14 @@ class ParsePSGC extends Command
      */
     public function createCity($row)
     {
-        $lastProvince = Province::orderBy('created_at', 'desc')->first();
-        $lastDistrict = District::orderBy('created_at', 'desc')->first();
+        $specialCities = ['099701000', '129804000'];
 
-        $latestProvince = optional($lastProvince)->id;
-        $latestDistrict = optional($lastDistrict)->id;
-
-        $data = [
-            'code' => $row['Code'],
-            'name' => $row['Name'],
-            'city_class' => $row['City Class'],
-            'income_classification' => $row["Income\nClassification"],
-            'population' => stringToInt($row["POPULATION\n(2015 POPCEN)"]),
-        ];
-
-        if ($latestProvince > $latestDistrict) {
-            $lastProvince->cities()->create($data);
-        } elseif ($latestDistrict > $latestProvince) {
-            $lastDistrict->cities()->create($data);
+        if (in_array($row['code'], $specialCities)) {
+            $this->latestCityMunSubMun = $this->latestRegion->cities()->create($row);
+        } else {
+            $this->latestCityMunSubMun = $this->latestProvinceDistrict->cities()->create($row);
         }
+        $this->latestCity = $this->latestCityMunSubMun;
     }
 
     /**
@@ -165,16 +121,9 @@ class ParsePSGC extends Command
      *
      * @param  array  $row
      */
-    public function createMunicipality($row)
+    public function createMun($row)
     {
-        $lastProvince = Province::orderBy('id', 'desc')->first();
-
-        $lastProvince->municipalities()->create([
-            'code' => $row['Code'],
-            'name' => $row['Name'],
-            'income_classification' => $row["Income\nClassification"],
-            'population' => stringToInt($row["POPULATION\n(2015 POPCEN)"]),
-        ]);
+        $this->latestCityMunSubMun = $this->latestProvinceDistrict->municipalities()->create($row);
     }
 
     /**
@@ -182,15 +131,9 @@ class ParsePSGC extends Command
      *
      * @param  array  $row
      */
-    public function createSubMunicipality($row)
+    public function createSubMun($row)
     {
-        $lastCity = City::orderBy('created_at', 'desc')->first();
-
-        $lastCity->subMunicipalities()->create([
-            'code' => $row['Code'],
-            'name' => $row['Name'],
-            'population' => stringToInt($row["POPULATION\n(2015 POPCEN)"]),
-        ]);
+        $this->latestCityMunSubMun = $this->latestCity->subMunicipalities()->create($row);
     }
 
     /**
@@ -198,37 +141,8 @@ class ParsePSGC extends Command
      *
      * @param  array  $row
      */
-    public function createBarangay($row)
+    public function createBgy($row)
     {
-        $lastCity = City::orderBy('id', 'desc')->first();
-        $lastMunicipality = Municipality::orderBy('id', 'desc')->first();
-        $lastSubMunicipality = SubMunicipality::orderBy('id', 'desc')->first();
-
-        $latestCity = optional($lastCity)->id;
-        $latestMunicipality = optional($lastMunicipality)->id;
-        $latestSubMunicipality = optional($lastSubMunicipality)->id;
-
-        $data = [
-            'code' => $row['Code'],
-            'name' => $row['Name'],
-            'population' => stringToInt($row["POPULATION\n(2015 POPCEN)"]),
-        ];
-
-        if (
-            $latestCity > $latestMunicipality
-            && $latestCity > $latestSubMunicipality
-        ) {
-            $lastCity->barangays()->create($data);
-        } elseif (
-            $latestMunicipality > $latestCity
-            && $latestMunicipality > $latestSubMunicipality
-        ) {
-            $lastMunicipality->barangays()->create($data);
-        } elseif (
-            $latestSubMunicipality > $latestCity
-            && $latestSubMunicipality > $latestMunicipality
-        ) {
-            $lastSubMunicipality->barangays()->create($data);
-        }
+        $this->latestCityMunSubMun->barangays()->create($row);
     }
 }

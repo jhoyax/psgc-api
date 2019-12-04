@@ -15,10 +15,10 @@ class CreateMunicipalitiesTable extends Migration
     {
         Schema::create('municipalities', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->morphs('municipality');
+            $table->morphs('geographic');
             $table->string('code');
             $table->string('name');
-            $table->string('income_classification')->nullable();
+            $table->string('income_class')->nullable();
             $table->integer('population')->default(0);
             $table->timestamps();
         });

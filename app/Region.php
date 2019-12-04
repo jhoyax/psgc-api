@@ -27,4 +27,14 @@ class Region extends Model
     {
         return $this->hasMany(District::class)->orderBy('name');
     }
+
+    /**
+     * Get all cities of the region
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function cities()
+    {
+        return $this->morphMany(City::class, 'geographic')->orderBy('name')->orderBy('name');
+    }
 }
