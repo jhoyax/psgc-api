@@ -20,12 +20,12 @@ class City extends JsonResource
             'city_class' => $this->city_class,
             'income_class' => $this->income_class,
             'population' => $this->population,
-            'subMunicipalities' => SubMunicipality::collection($this->whenLoaded('subMunicipalities')),
-            'barangays' => Barangay::collection($this->whenLoaded('barangays')),
             $this->mergeWhen(
                 isWordExist($request->get('parents'), 'show'),
                 getGeographicParents($this)
             ),
+            'subMunicipalities' => SubMunicipality::collection($this->whenLoaded('subMunicipalities')),
+            'barangays' => Barangay::collection($this->whenLoaded('barangays')),
         ];
     }
 }

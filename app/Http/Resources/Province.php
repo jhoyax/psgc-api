@@ -19,12 +19,12 @@ class Province extends JsonResource
             'name' => $this->name,
             'income_class' => $this->income_class,
             'population' => $this->population,
-            'cities' => City::collection($this->whenLoaded('cities')),
-            'municipalities' => Municipality::collection($this->whenLoaded('municipalities')),
             $this->mergeWhen(
                 isWordExist($request->get('parents'), 'show'),
                 getGeographicParents($this)
             ),
+            'cities' => City::collection($this->whenLoaded('cities')),
+            'municipalities' => Municipality::collection($this->whenLoaded('municipalities')),
         ];
     }
 }

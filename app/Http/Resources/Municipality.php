@@ -19,11 +19,11 @@ class Municipality extends JsonResource
             'name' => $this->name,
             'income_class' => $this->income_class,
             'population' => $this->population,
-            'barangays' => Barangay::collection($this->whenLoaded('barangays')),
             $this->mergeWhen(
                 isWordExist($request->get('parents'), 'show'),
                 getGeographicParents($this)
             ),
+            'barangays' => Barangay::collection($this->whenLoaded('barangays')),
         ];
     }
 }
