@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Barangay;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Barangay as ResourcesBarangay;
-use App\Http\Resources\BarangayCollection;
 use Illuminate\Http\Request;
 
 class BarangaysController extends Controller
@@ -19,7 +18,7 @@ class BarangaysController extends Controller
     {
         $data = Barangay::paginate($request->get('per_page'));
 
-        return response()->json(new BarangayCollection($data));
+        return ResourcesBarangay::collection($data);
     }
 
     /**
@@ -30,6 +29,6 @@ class BarangaysController extends Controller
      */
     public function show(Barangay $barangay)
     {
-        return response()->json(new ResourcesBarangay($barangay));
+        return new ResourcesBarangay($barangay);
     }
 }

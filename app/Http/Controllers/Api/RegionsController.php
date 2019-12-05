@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Region as ResourcesRegion;
-use App\Http\Resources\RegionCollection;
 use App\Region;
 use Illuminate\Http\Request;
 
@@ -22,7 +21,7 @@ class RegionsController extends Controller
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
         $data = Region::paginate($request->get('per_page'));
 
-        return response()->json(new RegionCollection($data->load($children)));
+        return ResourcesRegion::collection($data->load($children));
     }
 
     /**
@@ -35,6 +34,6 @@ class RegionsController extends Controller
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
 
-        return response()->json(new ResourcesRegion($region->load($children)));
+        return new ResourcesRegion($region->load($children));
     }
 }

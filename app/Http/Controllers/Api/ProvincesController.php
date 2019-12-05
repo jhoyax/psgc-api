@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Province as ResourcesProvince;
-use App\Http\Resources\ProvinceCollection;
 use App\Province;
 use Illuminate\Http\Request;
 
@@ -22,7 +21,7 @@ class ProvincesController extends Controller
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
         $data = Province::paginate($request->get('per_page'));
 
-        return response()->json(new ProvinceCollection($data->load($children)));
+        return ResourcesProvince::collection($data->load($children));
     }
 
     /**
@@ -35,6 +34,6 @@ class ProvincesController extends Controller
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
         
-        return response()->json(new ResourcesProvince($province->load($children)));
+        return new ResourcesProvince($province->load($children));
     }
 }

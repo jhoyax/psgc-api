@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Municipality as ResourcesMunicipality;
-use App\Http\Resources\MunicipalityCollection;
 use App\Municipality;
 use Illuminate\Http\Request;
 
@@ -22,7 +21,7 @@ class MunicipalitiesController extends Controller
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
         $data = Municipality::paginate($request->get('per_page'));
 
-        return response()->json(new MunicipalityCollection($data->load($children)));
+        return ResourcesMunicipality::collection($data->load($children));
     }
 
     /**
@@ -35,6 +34,6 @@ class MunicipalitiesController extends Controller
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
 
-        return response()->json(new ResourcesMunicipality($municipality->load($children)));
+        return new ResourcesMunicipality($municipality->load($children));
     }
 }
