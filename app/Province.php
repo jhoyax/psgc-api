@@ -6,7 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Province extends Model
 {
-    protected $fillable = ['code', 'name', 'income_classification', 'population'];
+    protected $fillable = ['code', 'name', 'income_class', 'population'];
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'code';
+    }
 
     /**
      * Get all cities of the province
@@ -26,5 +36,13 @@ class Province extends Model
     public function municipalities()
     {
         return $this->morphMany(Municipality::class, 'geographic')->orderBy('name');
+    }
+
+    /**
+     * Get the owning geographic model.
+     */
+    public function geographic()
+    {
+        return $this->morphTo();
     }
 }

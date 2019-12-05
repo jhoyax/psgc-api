@@ -9,6 +9,16 @@ class District extends Model
     protected $fillable = ['code', 'name', 'population'];
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'code';
+    }
+
+    /**
      * Get all cities of the district
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -26,5 +36,13 @@ class District extends Model
     public function municipalities()
     {
         return $this->morphMany(Municipality::class, 'geographic')->orderBy('name');
+    }
+
+    /**
+     * Get the owning geographic model.
+     */
+    public function geographic()
+    {
+        return $this->morphTo();
     }
 }

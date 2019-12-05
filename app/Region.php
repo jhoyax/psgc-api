@@ -9,23 +9,33 @@ class Region extends Model
     protected $fillable = ['code', 'name', 'population'];
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'code';
+    }
+
+    /**
      * Get all provinces of the region
      * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function provinces()
     {
-        return $this->hasMany(Province::class)->orderBy('name');
+        return $this->morphMany(Province::class, 'geographic')->orderBy('name')->orderBy('name');
     }
 
     /**
      * Get all districts of the region
      * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function districts()
     {
-        return $this->hasMany(District::class)->orderBy('name');
+        return $this->morphMany(District::class, 'geographic')->orderBy('name')->orderBy('name');
     }
 
     /**

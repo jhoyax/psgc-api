@@ -15,13 +15,11 @@ class CreateSubMunicipalitiesTable extends Migration
     {
         Schema::create('sub_municipalities', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('city_id');
+            $table->morphs('geographic');
             $table->string('code');
             $table->string('name');
             $table->integer('population')->default(0);
             $table->timestamps();
-
-            $table->foreign('city_id')->references('id')->on('cities');
         });
     }
 

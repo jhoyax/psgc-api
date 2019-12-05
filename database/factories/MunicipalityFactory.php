@@ -11,7 +11,7 @@ $factory->define(Municipality::class, function (Faker $faker) {
         'geographic_id' => factory('App\Province')->create()->id,
         'code' => $faker->randomNumber(),
         'name' => $faker->name(),
-        'income_classification' => $faker->name(),
+        'income_class' => $faker->name(),
         'population' => $faker->randomDigit(),
     ]);
 });

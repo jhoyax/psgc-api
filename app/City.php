@@ -9,13 +9,23 @@ class City extends Model
     protected $fillable = ['code', 'name', 'city_class', 'income_class', 'population'];
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'code';
+    }
+
+    /**
      * Get all subMunicipalities of the city
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function subMunicipalities()
     {
-        return $this->hasMany(SubMunicipality::class)->orderBy('name');
+        return $this->morphMany(SubMunicipality::class, 'geographic')->orderBy('name')->orderBy('name');
     }
 
     /**

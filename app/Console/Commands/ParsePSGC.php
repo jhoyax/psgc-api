@@ -47,7 +47,7 @@ class ParsePSGC extends Command
      */
     public function handle()
     {
-        $filePath = 'storage/excel/PSGC.csv';
+        $filePath = storage_path('excel/PSGC.csv');
 
         SimpleExcelReader::create($filePath)
             ->getRows()
@@ -62,7 +62,7 @@ class ParsePSGC extends Command
                     'population' => stringToInt($rowProperties["POPULATION\n(2015 POPCEN)"]),
                 ];
                 $methodName = 'create' . $row['level'];
-                
+
                 if (method_exists($this, $methodName)) {
                     $this->$methodName($row);
                 }

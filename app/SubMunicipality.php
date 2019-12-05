@@ -9,6 +9,16 @@ class SubMunicipality extends Model
     protected $fillable = ['code', 'name', 'population'];
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'code';
+    }
+
+    /**
      * Get all barangays of the subMunicipality
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -16,5 +26,13 @@ class SubMunicipality extends Model
     public function barangays()
     {
         return $this->morphMany(Barangay::class, 'geographic')->orderBy('name');
+    }
+
+    /**
+     * Get the owning geographic model.
+     */
+    public function geographic()
+    {
+        return $this->morphTo();
     }
 }

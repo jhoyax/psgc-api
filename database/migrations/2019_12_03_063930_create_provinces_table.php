@@ -15,14 +15,12 @@ class CreateProvincesTable extends Migration
     {
         Schema::create('provinces', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('region_id');
+            $table->morphs('geographic');
             $table->string('code');
             $table->string('name');
             $table->string('income_class')->nullable();
             $table->integer('population')->default(0);
             $table->timestamps();
-
-            $table->foreign('region_id')->references('id')->on('regions');
         });
     }
 
