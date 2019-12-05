@@ -19,37 +19,37 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::namespace('Api')->group(function () {
     Route::prefix('regions')->group(function () {
-        Route::get('/', 'RegionsController@index');
-        Route::get('{region}', 'RegionsController@show');
+        Route::get('/', 'RegionController@index')->name('region.index');
+        Route::get('{region}', 'RegionController@show')->name('region.show');
     });
 
     Route::prefix('provinces')->group(function () {
-        Route::get('/', 'ProvincesController@index');
-        Route::get('{province}', 'ProvincesController@show');
+        Route::get('/', 'ProvinceController@index')->name('province.index');
+        Route::get('{province}', 'ProvinceController@show')->name('province.show');
     });
     
     Route::prefix('districts')->group(function () {
-        Route::get('/', 'DistrictsController@index');
-        Route::get('{district}', 'DistrictsController@show');
+        Route::get('/', 'DistrictController@index')->name('district.index');
+        Route::get('{district}', 'DistrictController@show')->name('district.show');
     });
     
     Route::prefix('cities')->group(function () {
-        Route::get('/', 'CitiesController@index');
-        Route::get('{city}', 'CitiesController@show');
+        Route::get('/', 'CityController@index')->name('city.index');
+        Route::get('{city}', 'CityController@show')->name('city.show');
     });
     
     Route::prefix('municipalities')->group(function () {
-        Route::get('/', 'MunicipalitiesController@index');
-        Route::get('{municipality}', 'MunicipalitiesController@show');
+        Route::get('/', 'MunicipalityController@index')->name('municipality.index');
+        Route::get('{municipality}', 'MunicipalityController@show')->name('municipality.show');
     });
     
     Route::prefix('sub-municipalities')->group(function () {
-        Route::get('/', 'SubMunicipalitiesController@index');
-        Route::get('{subMunicipality}', 'SubMunicipalitiesController@show');
+        Route::get('/', 'SubMunicipalityController@index')->name('subMunicipality.index');
+        Route::get('{subMunicipality}', 'SubMunicipalityController@show')->name('subMunicipality.show');
     });
     
     Route::prefix('barangays')->group(function () {
-        Route::get('/', 'BarangaysController@index');
-        Route::get('{barangay}', 'BarangaysController@show');
+        Route::get('/', 'BarangayController@index')->name('barangay.index');
+        Route::get('{barangay}', 'BarangayController@show')->name('barangay.show');
     });
 });

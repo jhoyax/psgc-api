@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Province as ResourcesProvince;
-use App\Province;
+use App\Http\Resources\Region as ResourcesRegion;
+use App\Region;
 use Illuminate\Http\Request;
 
-class ProvincesController extends Controller
+class RegionController extends Controller
 {
-    protected $geographicChildren = ['municipalities', 'cities'];
+    protected $geographicChildren = ['provinces', 'districts', 'cities'];
 
     /**
      * Display a listing of the resource.
@@ -19,21 +19,21 @@ class ProvincesController extends Controller
     public function index(Request $request)
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
-        $data = Province::paginate($request->get('per_page'));
+        $data = Region::paginate($request->get('per_page'));
 
-        return ResourcesProvince::collection($data->load($children));
+        return ResourcesRegion::collection($data->load($children));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Province  $province
+     * @param  \App\Region  $region
      * @return \Illuminate\Http\Response
      */
-    public function show(Province $province, Request $request)
+    public function show(Region $region, Request $request)
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
-        
-        return new ResourcesProvince($province->load($children));
+
+        return new ResourcesRegion($region->load($children));
     }
 }

@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Barangay as ResourcesBarangay;
 use Illuminate\Http\Request;
 
-class BarangaysController extends Controller
+class BarangayController extends Controller
 {
     /**
      * Display a listing of the resource.

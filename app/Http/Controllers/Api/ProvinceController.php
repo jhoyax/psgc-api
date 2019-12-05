@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\City;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\City as ResourcesCity;
+use App\Http\Resources\Province as ResourcesProvince;
+use App\Province;
 use Illuminate\Http\Request;
 
-class CitiesController extends Controller
+class ProvinceController extends Controller
 {
-    protected $geographicChildren = ['subMunicipalities', 'barangays'];
+    protected $geographicChildren = ['municipalities', 'cities'];
 
     /**
      * Display a listing of the resource.
@@ -19,21 +19,21 @@ class CitiesController extends Controller
     public function index(Request $request)
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
-        $data = City::paginate($request->get('per_page'));
+        $data = Province::paginate($request->get('per_page'));
 
-        return ResourcesCity::collection($data->load($children));
+        return ResourcesProvince::collection($data->load($children));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\City  $city
+     * @param  \App\Province  $province
      * @return \Illuminate\Http\Response
      */
-    public function show(City $city, Request $request)
+    public function show(Province $province, Request $request)
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
-
-        return new ResourcesCity($city->load($children));
+        
+        return new ResourcesProvince($province->load($children));
     }
 }

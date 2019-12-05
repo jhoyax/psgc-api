@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\SubMunicipality as ResourcesSubMunicipality;
-use App\SubMunicipality;
+use App\Http\Resources\Municipality as ResourcesMunicipality;
+use App\Municipality;
 use Illuminate\Http\Request;
 
-class SubMunicipalitiesController extends Controller
+class MunicipalityController extends Controller
 {
     protected $geographicChildren = ['barangays'];
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -19,21 +19,21 @@ class SubMunicipalitiesController extends Controller
     public function index(Request $request)
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
-        $data = SubMunicipality::paginate($request->get('per_page'));
+        $data = Municipality::paginate($request->get('per_page'));
 
-        return ResourcesSubMunicipality::collection($data->load($children));
+        return ResourcesMunicipality::collection($data->load($children));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\SubMunicipality  $subMunicipality
+     * @param  \App\Municipality  $municipality
      * @return \Illuminate\Http\Response
      */
-    public function show(SubMunicipality $subMunicipality, Request $request)
+    public function show(Municipality $municipality, Request $request)
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
 
-        return new ResourcesSubMunicipality($subMunicipality->load($children));
+        return new ResourcesMunicipality($municipality->load($children));
     }
 }

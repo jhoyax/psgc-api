@@ -6,7 +6,7 @@ use App\Region;
 use Illuminate\Console\Command;
 use Spatie\SimpleExcel\SimpleExcelReader;
 
-class ParsePSGC extends Command
+class ParsePSGCCommand extends Command
 {
     /**
      * The name and signature of the console command.
