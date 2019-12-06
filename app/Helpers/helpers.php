@@ -71,8 +71,8 @@ if (!function_exists('getGeographicParents')) {
     /**
      * Get geographic parents
      *
-     * @param  obj  $item
-     * @return arr
+     * @param  object  $item
+     * @return array
      */
     function getGeographicParents($item)
     {
@@ -92,8 +92,10 @@ if (!function_exists('getGeographicParent')) {
     /**
      * Get geographic parent
      *
-     * @param  obj  $item
-     * @return arr
+     * @param  object  $item
+     * @param  array  &$data
+     * @param  array  &$geographic
+     * @return array
      */
     function getGeographicParent($item, &$data, &$geographic)
     {
