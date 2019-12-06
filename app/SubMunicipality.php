@@ -29,10 +29,10 @@ class SubMunicipality extends Model
     }
 
     /**
-     * Get the owning geographic model.
+     * Get the city that owns the submunicipality.
      */
-    public function geographic()
+    public function city()
     {
-        return $this->morphTo();
+        return $this->belongsTo(City::class);
     }
 }

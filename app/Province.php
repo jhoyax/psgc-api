@@ -39,10 +39,10 @@ class Province extends Model
     }
 
     /**
-     * Get the owning geographic model.
+     * Get the region that owns the province.
      */
-    public function geographic()
+    public function region()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Region::class);
     }
 }

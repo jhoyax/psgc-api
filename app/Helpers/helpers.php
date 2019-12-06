@@ -77,26 +77,51 @@ if (!function_exists('getGeographicParents')) {
     function getGeographicParents($item)
     {
         $data = [];
-        $modelName = getLastWord('\\', $item->geographic_type);
-        $resourceClass = 'App\\Http\\Resources\\' . $modelName;
-        $geographic = new $resourceClass($item->geographic);
-        $data[strtolower($modelName)] = $geographic;
+        $geographic = [];
+        getGeographicParent($item, $data, $geographic);
         
         while ($geographic) {
-            $modelName = getLastWord('\\', $geographic->geographic_type);
-            $resourceClass = 'App\\Http\\Resources\\' . getLastWord('\\', $modelName);
-
-            if (class_exists($resourceClass)) {
-                $geographic = new $resourceClass($geographic->geographic);
-    
-                if ($geographic) {
-                    $data[strtolower($modelName)] = $geographic;
-                }
-            } else {
-                $geographic = false;
-            }
+            getGeographicParent($geographic, $data, $geographic);
         }
 
         return $data;
+    }
+}
+
+if (!function_exists('getGeographicParent')) {
+    /**
+     * Get geographic parent
+     *
+     * @param  obj  $item
+     * @return arr
+     */
+    function getGeographicParent($item, &$data, &$geographic)
+    {
+        $classWithForeignKey = [
+            'Province' => 'Region', 
+            'District' => 'Region', 
+            'SubMunicipality' => 'City',
+        ];
+        $modelName = getLastWord('\\', get_class($item));
+
+        if (array_key_exists($modelName, $classWithForeignKey)) {
+            $parentClass = strtolower($classWithForeignKey[$modelName]);
+            $resourceClass = 'App\\Http\\Resources\\' . $classWithForeignKey[$modelName];
+            $geographic = new $resourceClass($item->$parentClass);
+            $data[$parentClass] = $geographic;
+        } else {
+            $geographicModelName = getLastWord('\\', $item->geographic_type);
+            $resourceClass = 'App\\Http\\Resources\\' . $geographicModelName;
+
+            if (class_exists($resourceClass)) {
+                $geographic = new $resourceClass($item->geographic);
+    
+                if ($geographic) {
+                    $data[strtolower($geographicModelName)] = $geographic;
+                }
+            } else {
+                $geographic = [];
+            }
+        }
     }
 }

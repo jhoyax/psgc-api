@@ -21,21 +21,21 @@ class Region extends Model
     /**
      * Get all provinces of the region
      * 
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function provinces()
     {
-        return $this->morphMany(Province::class, 'geographic')->orderBy('name')->orderBy('name');
+        return $this->hasMany(Province::class)->orderBy('name');
     }
 
     /**
      * Get all districts of the region
      * 
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function districts()
     {
-        return $this->morphMany(District::class, 'geographic')->orderBy('name')->orderBy('name');
+        return $this->hasMany(District::class)->orderBy('name');
     }
 
     /**

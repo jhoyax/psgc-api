@@ -21,11 +21,11 @@ class City extends Model
     /**
      * Get all subMunicipalities of the city
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function subMunicipalities()
     {
-        return $this->morphMany(SubMunicipality::class, 'geographic')->orderBy('name')->orderBy('name');
+        return $this->hasMany(SubMunicipality::class)->orderBy('name');
     }
 
     /**
