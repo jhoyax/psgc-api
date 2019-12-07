@@ -1,7 +1,4 @@
-Code,Name,Geographic Level,City Class,"Income
-Classification","Urban / Rural
-(based on 2015 POPCEN)","POPULATION
-(2015 POPCEN)",
+Code,Name,Geographic Level,City Class,"Income Classification","Urban / Rural (based on 2015 POPCEN)","POPULATION (2015 POPCEN)",
 010000000,REGION I (ILOCOS REGION),Reg,,,,"  5,026,128 ",
 012800000,ILOCOS NORTE,Prov,,1st,,"  593,081 ",
 012801000,ADAMS,Mun,,5th,,"  1,792 ",

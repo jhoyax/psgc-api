@@ -22,4 +22,4 @@ services:
       - ./mysqldata:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=ligblog
+      - MYSQL_DATABASE=psgc

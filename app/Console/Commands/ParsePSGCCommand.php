@@ -57,9 +57,9 @@ class ParsePSGCCommand extends Command
                     'name' => $rowProperties['Name'],
                     'level' => $rowProperties['Geographic Level'],
                     'city_class' => $rowProperties['City Class'],
-                    'income_class' => $rowProperties["Income\nClassification"],
-                    'area_type' => $rowProperties["Urban / Rural\n(based on 2015 POPCEN)"] == 'R' ? 'rural' : 'urban',
-                    'population' => stringToInt($rowProperties["POPULATION\n(2015 POPCEN)"]),
+                    'income_class' => $rowProperties['Income Classification'],
+                    'area_type' => $rowProperties['Urban / Rural (based on 2015 POPCEN)'] == 'R' ? 'rural' : 'urban',
+                    'population' => stringToInt($rowProperties['POPULATION (2015 POPCEN)']),
                 ];
                 $methodName = 'create' . $row['level'];
 
