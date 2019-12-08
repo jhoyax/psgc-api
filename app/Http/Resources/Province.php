@@ -20,7 +20,7 @@ class Province extends JsonResource
             'income_class' => $this->income_class,
             'population' => $this->population,
             $this->mergeWhen(
-                isWordExist($request->get('parents'), 'show'),
+                isWordExist($request->get('parents'), 'show') && $request->province,
                 getGeographicParents($this)
             ),
             'cities' => City::collection($this->whenLoaded('cities')),

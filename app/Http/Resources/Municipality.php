@@ -20,7 +20,7 @@ class Municipality extends JsonResource
             'income_class' => $this->income_class,
             'population' => $this->population,
             $this->mergeWhen(
-                isWordExist($request->get('parents'), 'show'),
+                isWordExist($request->get('parents'), 'show') && $request->municipality,
                 getGeographicParents($this)
             ),
             'barangays' => Barangay::collection($this->whenLoaded('barangays')),

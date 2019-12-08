@@ -19,7 +19,7 @@ class District extends JsonResource
             'name' => $this->name,
             'population' => $this->population,
             $this->mergeWhen(
-                isWordExist($request->get('parents'), 'show'),
+                isWordExist($request->get('parents'), 'show') && $request->district,
                 getGeographicParents($this)
             ),
             'cities' => City::collection($this->whenLoaded('cities')),

@@ -20,7 +20,7 @@ class Barangay extends JsonResource
             'area_type' => $this->area_type,
             'population' => $this->population,
             $this->mergeWhen(
-                isWordExist($request->get('parents'), 'show'),
+                isWordExist($request->get('parents'), 'show') && $request->barangay,
                 getGeographicParents($this)
             ),
         ];

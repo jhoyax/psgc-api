@@ -77,12 +77,11 @@ if (!function_exists('getGeographicParents')) {
     function getGeographicParents($item)
     {
         $data = [];
-        $geographic = [];
-        getGeographicParent($item, $data, $geographic);
-        
-        while ($geographic) {
+        $geographic = $item;
+
+        do {
             getGeographicParent($geographic, $data, $geographic);
-        }
+        } while ($geographic);
 
         return $data;
     }
@@ -100,8 +99,8 @@ if (!function_exists('getGeographicParent')) {
     function getGeographicParent($item, &$data, &$geographic)
     {
         $classWithForeignKey = [
-            'Province' => 'Region', 
-            'District' => 'Region', 
+            'Province' => 'Region',
+            'District' => 'Region',
             'SubMunicipality' => 'City',
         ];
         $modelName = getLastWord('\\', get_class($item));
@@ -117,10 +116,7 @@ if (!function_exists('getGeographicParent')) {
 
             if (class_exists($resourceClass)) {
                 $geographic = new $resourceClass($item->geographic);
-    
-                if ($geographic) {
-                    $data[strtolower($geographicModelName)] = $geographic;
-                }
+                $data[strtolower($geographicModelName)] = $geographic;
             } else {
                 $geographic = [];
             }
