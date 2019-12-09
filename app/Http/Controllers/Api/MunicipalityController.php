@@ -19,9 +19,9 @@ class MunicipalityController extends Controller
     public function index(Request $request)
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
-        $data = Municipality::paginate($request->get('per_page'));
+        $data = Municipality::with($children)->paginate($request->get('per_page'));
 
-        return ResourcesMunicipality::collection($data->load($children));
+        return ResourcesMunicipality::collection($data);
     }
 
     /**

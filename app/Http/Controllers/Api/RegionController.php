@@ -19,9 +19,9 @@ class RegionController extends Controller
     public function index(Request $request)
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
-        $data = Region::paginate($request->get('per_page'));
+        $data = Region::with($children)->paginate($request->get('per_page'));
 
-        return ResourcesRegion::collection($data->load($children));
+        return ResourcesRegion::collection($data);
     }
 
     /**

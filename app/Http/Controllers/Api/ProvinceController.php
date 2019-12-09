@@ -19,9 +19,9 @@ class ProvinceController extends Controller
     public function index(Request $request)
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
-        $data = Province::paginate($request->get('per_page'));
+        $data = Province::with($children)->paginate($request->get('per_page'));
 
-        return ResourcesProvince::collection($data->load($children));
+        return ResourcesProvince::collection($data);
     }
 
     /**

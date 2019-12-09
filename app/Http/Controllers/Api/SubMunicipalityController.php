@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class SubMunicipalityController extends Controller
 {
     protected $geographicChildren = ['barangays'];
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -19,9 +19,9 @@ class SubMunicipalityController extends Controller
     public function index(Request $request)
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
-        $data = SubMunicipality::paginate($request->get('per_page'));
+        $data = SubMunicipality::with($children)->paginate($request->get('per_page'));
 
-        return ResourcesSubMunicipality::collection($data->load($children));
+        return ResourcesSubMunicipality::collection($data);
     }
 
     /**

@@ -19,9 +19,9 @@ class CityController extends Controller
     public function index(Request $request)
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
-        $data = City::paginate($request->get('per_page'));
+        $data = City::with($children)->paginate($request->get('per_page'));
 
-        return ResourcesCity::collection($data->load($children));
+        return ResourcesCity::collection($data);
     }
 
     /**

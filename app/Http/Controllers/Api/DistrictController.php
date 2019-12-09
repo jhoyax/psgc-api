@@ -19,9 +19,9 @@ class DistrictController extends Controller
     public function index(Request $request)
     {
         $children = arrIntersect($this->geographicChildren, $request->get('include'));
-        $data = District::paginate($request->get('per_page'));
+        $data = District::with($children)->paginate($request->get('per_page'));
 
-        return ResourcesDistrict::collection($data->load($children));
+        return ResourcesDistrict::collection($data);
     }
 
     /**
