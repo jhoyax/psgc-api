@@ -20,7 +20,7 @@
 | GET|HEAD | api/regions/{region}                     |
 | GET|HEAD | api/sub-municipalities                   |
 | GET|HEAD | api/sub-municipalities/{subMunicipality} |
-| GET|HEAD | api/summary                              |
+| GET|HEAD | api/summaries                              |
 +----------+------------------------------------------+
 ```
 
@@ -69,6 +69,5 @@
 ## Summary
 
 ```
-/api/summary
-/api/regions?summary=show
+/api/summaries
 ```
