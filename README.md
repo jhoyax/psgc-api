@@ -20,7 +20,7 @@
 | GET|HEAD | api/regions/{region}                     |
 | GET|HEAD | api/sub-municipalities                   |
 | GET|HEAD | api/sub-municipalities/{subMunicipality} |
-| GET|HEAD | api/summaries                              |
+| GET|HEAD | api/summaries                            |
 +----------+------------------------------------------+
 ```
 
